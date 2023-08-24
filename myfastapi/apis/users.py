@@ -3,6 +3,7 @@ from common.router import TimedRoute
 from fastapi import APIRouter
 from schemas.user_schema import UserInSchema, UserSchema
 from models.user_model import Users
+from tasks.test2 import async_create_user
 
 
 router = APIRouter(route_class=TimedRoute)
@@ -21,7 +22,6 @@ async def create_user(username: UserInSchema):
 
 @router.get("/test_celery")
 async def test_celery():
-    from tasks.test2 import async_create_user
     async_create_user.delay()
     return Response(content="haha")
 

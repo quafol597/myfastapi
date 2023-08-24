@@ -1,9 +1,8 @@
-from asgiref.sync import async_to_sync
 from functools import wraps
 import asyncio
 
 
-def task_decorator(async_func):
+def async_to_sync(async_func):
 
     @wraps(async_func)
     def inner(*args, **kwargs):
