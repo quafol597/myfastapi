@@ -7,5 +7,4 @@ class ProjectConfig(BaseConfig):
     pass
 
 
-
 project_config = ProjectConfig()

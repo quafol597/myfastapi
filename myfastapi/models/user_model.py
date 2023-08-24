@@ -18,7 +18,6 @@ class Users(models.Model):
     password_hash = fields.CharField(max_length=128, null=True)
     created_at = fields.DatetimeField(auto_now_add=True)
     modified_at = fields.DatetimeField(auto_now=True)
-    
 
     def full_name(self) -> str:
         """
@@ -31,5 +30,3 @@ class Users(models.Model):
     class PydanticMeta:
         computed = ["full_name"]
         exclude = ["password_hash"]
-
-

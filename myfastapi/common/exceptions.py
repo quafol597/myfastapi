@@ -16,10 +16,10 @@ class BaseError(Exception):
         return self._code
 
     def __str__(self) -> str:
-        return f'code={self.code}, message=`{self.message}`'
+        return f"code={self.code}, message=`{self.message}`"
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.__str__()})'
+        return f"{self.__class__.__name__}({self.__str__()})"
 
 
 class CommonError(BaseError):
@@ -66,11 +66,12 @@ class ModelClassNotFoundException(BaseError):
     def __init__(self, model_name, message="对应的Model类不存在, 请确保该model是document或entity类型", code=404):
         self._model_name = model_name
         self._code = code
-        self._message = f'{model_name}: {message}'
+        self._message = f"{model_name}: {message}"
 
 
 class InvalidOperationError(ApplicationError):
     pass
+
 
 class InvalidConfigurationError(ApplicationError):
     pass

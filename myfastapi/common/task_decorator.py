@@ -3,7 +3,6 @@ import asyncio
 
 
 def async_to_sync(async_func):
-
     @wraps(async_func)
     def inner(*args, **kwargs):
         event_loop = asyncio.get_event_loop()

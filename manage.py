@@ -18,19 +18,19 @@ def main():
 def worker():
     from application import app
     from fastapi.testclient import TestClient
-    
+
     with TestClient(app):
         from tasks.celery import app as celery_app
-        celery_app.Worker(loglevel='info').start()
-    
+
+        celery_app.Worker(loglevel="info").start()
 
 
 @main.command(context_settings={"ignore_unknown_options": True})
 def beat():
     from celery.apps.beat import Beat
     from tasks.celery import app
-    Beat(app=app, loglevel='info').run()
 
+    Beat(app=app, loglevel="info").run()
 
 
 @main.command(context_settings={"ignore_unknown_options": True})

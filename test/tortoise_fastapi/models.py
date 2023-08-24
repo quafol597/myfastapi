@@ -31,4 +31,6 @@ class Users(models.Model):
 
 
 User_Pydantic = pydantic_model_creator(Users, name="User")
-UserIn_Pydantic = pydantic_model_creator(Users, name="UserIn", exclude=("password_hash", "created_at", "modified_at", "id"))
+UserIn_Pydantic = pydantic_model_creator(
+    Users, name="UserIn", exclude=("password_hash", "created_at", "modified_at", "id")
+)
