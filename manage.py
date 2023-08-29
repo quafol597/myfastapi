@@ -1,6 +1,6 @@
 """
 项目的管理脚本:
-包括启动 api; migrate; upgrade; 启动worker, 启动 celery
+包括启动 api; migrate; upgrade; 启动 worker, 启动 beat
 """
 import click
 from myfastapi.configs import settings

@@ -26,6 +26,8 @@ class App(FastAPI):
         self.load_router()
         self.load_models()
         self.load_sentry()
+        # self.load_fastapi_limiter()
+        # self.load_fastapi_cache()
         self.setup_middlewares()
         self.mount("/static", StaticFiles(directory=f"{settings.ROOT}/static"), name="static")
 
@@ -35,9 +37,29 @@ class App(FastAPI):
             config=settings.TORTOISE_ORM,
             add_exception_handlers=True,
         )
+
     def load_sentry(self):
         import sentry_sdk
+
         sentry_sdk.init("http://5b9dc94e89e5431086f997a0ddb48355@42.193.248.250:19000/2")
+
+    async def load_fastapi_limiter(self):
+        # 项目地址: https://github.com/long2ice/fastapi-limiter
+        from fastapi_limiter import FastAPILimiter
+        from fastapi_limiter.depends import RateLimiter
+
+        redis = redis.from_url("redis://localhost", encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis)
+
+    def load_fastapi_cache(self):
+        # 项目地址: https://github.com/long2ice/fastapi-cache
+        from fastapi_cache import FastAPICache
+        from fastapi_cache.backends.redis import RedisBackend
+        from fastapi_cache.decorator import cache
+        import aioredis
+
+        redis = aioredis.from_url("redis://localhost")
+        FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
     def load_router(self):
         from apis import main_router
