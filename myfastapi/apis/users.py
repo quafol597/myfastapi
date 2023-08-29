@@ -3,7 +3,7 @@ from common.router import TimedRoute
 from fastapi import APIRouter
 from schemas.user_schema import UserInSchema, UserSchema
 from models.user_model import Users
-from tasks.test2 import async_create_user
+from tasks.task_file2 import async_create_user
 
 
 router = APIRouter(route_class=TimedRoute)
@@ -17,6 +17,7 @@ async def get_users():
 @router.post("/", response_model=UserSchema)
 async def create_user(username: UserInSchema):
     user_obj = await Users.create(username=username)
+    a = 1/0
     return await UserSchema.from_tortoise_orm(user_obj)
 
 

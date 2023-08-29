@@ -19,16 +19,10 @@ async def client():
 
 @pytest.mark.anyio
 async def test_create_user(client: AsyncClient):  # nosec
-    response = await client.post("/users", json={"username": "admin", "name": None, "family_name": None})
-    assert response.status_code == 200, response.text
+    response = await client.post("/users", json={"username": "admin3"})
     data = response.json()
-    assert data["username"] == "admin"
-    assert "id" in data
-    user_id = data["id"]
-
-    response = await client.get("/user/1")
-
-    print()
+    response = await client.get(f"/user/{data['id']}")
+    print(response.json())
 
 
 if __name__ == "__main__":

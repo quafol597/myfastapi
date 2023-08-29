@@ -25,6 +25,7 @@ class App(FastAPI):
         )
         self.load_router()
         self.load_models()
+        self.load_sentry()
         self.setup_middlewares()
         self.mount("/static", StaticFiles(directory=f"{settings.ROOT}/static"), name="static")
 
@@ -34,6 +35,9 @@ class App(FastAPI):
             config=settings.TORTOISE_ORM,
             add_exception_handlers=True,
         )
+    def load_sentry(self):
+        import sentry_sdk
+        sentry_sdk.init("http://5b9dc94e89e5431086f997a0ddb48355@42.193.248.250:19000/2")
 
     def load_router(self):
         from apis import main_router
