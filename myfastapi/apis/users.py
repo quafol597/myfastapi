@@ -1,17 +1,19 @@
-from fastapi import HTTPException, Response
+from fastapi import Depends, HTTPException, Response
 from common.router import TimedRoute
 from fastapi import APIRouter
 from schemas.user_schema import UserInSchema, UserSchema
 from models.user_model import Users
 from tasks.task_file2 import async_create_user
 from configs.logging_settings import logger
+from fastapi_limiter.depends import RateLimiter
+from fastapi_cache.decorator import cache
 
 router = APIRouter(route_class=TimedRoute)
 
 
-@router.get("/", response_model=list[UserSchema])
+@router.get("/", dependencies=[Depends(RateLimiter(times=2, seconds=5))], response_model=list[UserSchema])
 async def get_users():
-    logger.info('获取用户')
+    logger.info("获取用户")
     return await UserSchema.from_queryset(Users.all())
 
 
@@ -21,10 +23,17 @@ async def create_user(username: UserInSchema):
     return await UserSchema.from_tortoise_orm(user_obj)
 
 
+@cache(expire=10)  # 最好缓存, 入参出参都可以 json 的函数
+async def test():
+    print("访问到了")
+    return "haha"
+
+
 @router.get("/test_celery")
 async def test_celery():
     async_create_user.delay()
-    return Response(content="haha")
+    content = await test()
+    return Response(content=content)
 
 
 @router.get("/{user_id}", response_model=UserSchema)

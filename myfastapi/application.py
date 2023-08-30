@@ -20,13 +20,14 @@ class App(FastAPI):
             debug=settings.DEBUG,
             title=settings.APP_TITLE,
             description=settings.APP_DESCRIPTION,
+            on_startup=[self.run_startup_task],
+            on_shutdown=[self.run_shutdown_task],
             version=settings.APP_VERSION,
             **kwargs,
         )
         self.load_router()
         self.load_models()
         self.load_sentry()
-        # self.load_fastapi_limiter()  # 这两个用 start_up 加载
         # self.load_fastapi_cache()
         # flast-mail 地址: https://github.com/sabuhish/fastapi-mail
         self.setup_middlewares()
@@ -44,22 +45,28 @@ class App(FastAPI):
 
         sentry_sdk.init("http://5b9dc94e89e5431086f997a0ddb48355@42.193.248.250:19000/2")
 
+    async def run_startup_task(self):
+        await self.load_fastapi_limiter()
+        await self.load_fastapi_cache()
+
+    async def run_shutdown_task(self):
+        pass
+
     async def load_fastapi_limiter(self):
         # 项目地址: https://github.com/long2ice/fastapi-limiter
         from fastapi_limiter import FastAPILimiter
-        from fastapi_limiter.depends import RateLimiter
+        import redis.asyncio as redis
 
-        redis = redis.from_url("redis://localhost", encoding="utf-8", decode_responses=True)
-        await FastAPILimiter.init(redis)
+        redis_cli = redis.from_url(settings.LIMIT_REDIS, encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis_cli)
 
-    def load_fastapi_cache(self):
+    async def load_fastapi_cache(self):
         # 项目地址: https://github.com/long2ice/fastapi-cache
         from fastapi_cache import FastAPICache
         from fastapi_cache.backends.redis import RedisBackend
-        from fastapi_cache.decorator import cache
         import aioredis
 
-        redis = aioredis.from_url("redis://localhost")
+        redis = aioredis.from_url(settings.CACHE_REDIS)
         FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
 
     def load_router(self):

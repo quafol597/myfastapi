@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 # from configs.logging_settings import LOGGING_CONFIG
 from pathlib import Path
 from configs.tortoise_setting import TORTOISE_ORM
@@ -35,6 +36,15 @@ class Settings(BaseSettings):
     PORT: int = 8000
     SSE_LOOP_DELAY: int = 1  # sse推送循环延迟时间, second
     SSE_RETRY_TIMEOUT: int = 15000  # sse推送重试时间, milisecond
+
+    # ===========================数据库配置=================================
+    MYSQL_URL: str = "mysql://root:123123@42.193.248.250:13306/test_db"
+    TORTOISE_ORM: dict = TORTOISE_ORM
+    REDIS_URL: str = "redis://42.193.248.250:16379"
+
+    CACHE_REDIS: str = REDIS_URL + "/5"
+    LIMIT_REDIS: str = REDIS_URL + "/6"
+
     # ===========================Celery 配置=================================
     CELERY_CONFIG: CeleryConfig = CeleryConfig()
     # CELERY_BROKER: str = "redis://42.193.248.250:16379/0"
@@ -72,10 +82,6 @@ class Settings(BaseSettings):
     # responses that smaller than GZIP_MINIMUM_SIZE bytes will not be gziped
     GZIP_MINIMUM_SIZE: int = 500
     ELASTIC_APM_SERVICE_NAME: str | None = None
-
-    # ===========================数据库配置=================================
-    MYSQL_URL: str = "mysql://root:123123@42.193.248.250:13306/test_db"
-    TORTOISE_ORM: dict = TORTOISE_ORM
 
     # ===========================Email 配置=================================
     MAIL_USERNAME: str = "893180769@qq.com"
