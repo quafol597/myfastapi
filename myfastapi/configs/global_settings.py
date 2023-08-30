@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from uvicorn.config import LOGGING_CONFIG
+# from configs.logging_settings import LOGGING_CONFIG
 from pathlib import Path
 from configs.tortoise_setting import TORTOISE_ORM
 from celery.schedules import crontab
@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     # ===========================初始化配置=================================
     PROJECT_NAME: str = "myfastapi"
     ROOT: str = str(Path(__file__).parent.parent.parent)
-    LOGGING_CONFIG: dict = LOGGING_CONFIG
+    # LOGGING_CONFIG: dict = LOGGING_CONFIG
     LOG_LEVEL: str = "info"
     AUTO_RELOAD: bool = True
     DEBUG: bool = False
@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     APP_VERSION: str = "v0.1"
     HOST: str = "127.0.0.1"
     PORT: int = 8000
+    SSE_LOOP_DELAY: int = 1  # sse推送循环延迟时间, second
+    SSE_RETRY_TIMEOUT: int = 15000  # sse推送重试时间, milisecond
     # ===========================Celery 配置=================================
     CELERY_CONFIG: CeleryConfig = CeleryConfig()
     # CELERY_BROKER: str = "redis://42.193.248.250:16379/0"
@@ -74,6 +76,17 @@ class Settings(BaseSettings):
     # ===========================数据库配置=================================
     MYSQL_URL: str = "mysql://root:123123@42.193.248.250:13306/test_db"
     TORTOISE_ORM: dict = TORTOISE_ORM
+
+    # ===========================Email 配置=================================
+    MAIL_USERNAME: str = "893180769@qq.com"
+    MAIL_PASSWORD: str = "wbhwgvscefiibcbd"
+    MAIL_FROM: str = "893180769@qq.com"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "smtp.qq.com"
+    MAIL_STARTTLS: bool = True
+    MAIL_SSL_TLS: bool = False
+    USE_CREDENTIALS: bool = True
+    VALIDATE_CERTS: bool = False
 
 
 settings = Settings()

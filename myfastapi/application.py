@@ -26,8 +26,9 @@ class App(FastAPI):
         self.load_router()
         self.load_models()
         self.load_sentry()
-        # self.load_fastapi_limiter()
+        # self.load_fastapi_limiter()  # 这两个用 start_up 加载
         # self.load_fastapi_cache()
+        # flast-mail 地址: https://github.com/sabuhish/fastapi-mail
         self.setup_middlewares()
         self.mount("/static", StaticFiles(directory=f"{settings.ROOT}/static"), name="static")
 

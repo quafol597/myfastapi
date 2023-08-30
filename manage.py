@@ -4,6 +4,7 @@
 """
 import click
 from myfastapi.configs import settings
+from myfastapi.configs.logging_settings import LOGGING_CONFIG
 from aerich import Command
 import asyncio
 
@@ -73,7 +74,7 @@ def api():
         "myfastapi.application:app",
         host=settings.HOST,
         port=settings.PORT,
-        log_config=settings.LOGGING_CONFIG,
+        log_config=LOGGING_CONFIG,
         log_level=settings.LOG_LEVEL,
         debug=settings.DEBUG,
         reload=settings.AUTO_RELOAD,

@@ -1,1 +1,1 @@
-from .settings import settings
+from .global_settings import settings

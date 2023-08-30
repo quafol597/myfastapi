@@ -4,20 +4,20 @@ from fastapi import APIRouter
 from schemas.user_schema import UserInSchema, UserSchema
 from models.user_model import Users
 from tasks.task_file2 import async_create_user
-
+from configs.logging_settings import logger
 
 router = APIRouter(route_class=TimedRoute)
 
 
 @router.get("/", response_model=list[UserSchema])
 async def get_users():
+    logger.info('获取用户')
     return await UserSchema.from_queryset(Users.all())
 
 
 @router.post("/", response_model=UserSchema)
 async def create_user(username: UserInSchema):
     user_obj = await Users.create(username=username)
-    a = 1/0
     return await UserSchema.from_tortoise_orm(user_obj)
 
 
